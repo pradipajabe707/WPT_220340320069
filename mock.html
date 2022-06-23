@@ -1,0 +1,79 @@
+<html>
+  <body>
+    <form action="poc1" method="post">
+      <br />
+      <br /><input
+        type="text"
+        placeholder="Book id"
+        id="bookid"
+        name="bookid"
+      />
+      <span id="ajabe">what happend book yes or not</span><br /><input
+        type="text"
+        placeholder="Book name"
+        id="bookname"
+        name="bookname"
+      />
+      <br /><input type="text" placeholder="Price" id="price" name="price" />
+      <br />
+      <br />
+      <input type="submit" value="update book" id="update" name="update" />
+    </form>
+  </body>
+
+  <script src="jquery-3.5.1.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $("#bookid").blur(() => {
+        console.log("blur occoured");
+        let input = { bookid: $("#bookid").val() };
+
+        let pardip = {
+          type: "get",
+          dataType: "json",
+          url: "http://localhost:3000/getbookdetails",
+          data: input,
+          success: function (datas) {
+            if (datas.bookfoundstatus === true) {
+              $("#bookname").val(datas.bookdetalis.bookname);
+              $("#price").val(datas.bookdetalis.price);
+              $("#ajabe").text("book is found");
+            } else {
+              $("#bookname").val("");
+              $("#price").val("");
+              $("#ajabe").text("book is  not found");
+            }
+          },
+          error: function (error) {
+            console.log("error occoured");
+          },
+        };
+        $.ajax(pardip);
+      });
+
+      $("#update").click(() => {
+        console.log("update event  occoured");
+        let input = { bookid: $("#bookid").val(), price: "#price".val() };
+
+        let pardip = {
+          type: "get",
+          dataType: "json",
+          url: "http://localhost:3000/updatebook",
+          data: input,
+          success: function (datas) {
+            if (datas.bookfoundstatus === true) {
+              $("#ajabe").text("book price updated");
+            } else {
+              $("#price").val("");
+              $("#ajabe").text("book pricr not updated");
+            }
+          },
+          error: function (error) {
+            console.log("error occoured");
+          },
+        };
+        $.ajax(pardip);
+      });
+    });
+  </script>
+</html>
